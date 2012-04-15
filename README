@@ -1,0 +1,1 @@
+Project to play around with the Wii Remote on Android.  The first goal is to use the Wii Remote as a pointing device (i.e. mouse) on Android.  I'm hoping to obtain reasonable accuracy without the use of the IR Sensor Bar.  Hopefully the data from the internal accelerometer and gyroscope (Wii Remote Plus) will good enough.

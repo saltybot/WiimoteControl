@@ -15,6 +15,7 @@ import android.util.Log;
 public class WiimoteControlActivity extends Activity {
 
     private static final int REQUEST_ENABLE_BT = 0x424C5545;
+    private static final int REQUEST_GRANT_SUPERUSER = 0x524F4F54;
 	
     private static final String TAG = "WiimoteControlActivity";
 
@@ -41,9 +42,10 @@ public class WiimoteControlActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        
+
+        // Enable user read/write permission on /dev/uinput; need ROOT
         try {
-            Runtime.getRuntime().exec("/system/bin/su -c 'chmod 666 /dev/uinput'");
+            Runtime.getRuntime().exec(new String[]{"su", "-c", "chmod 666 /dev/uinput"});
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -79,6 +81,10 @@ public class WiimoteControlActivity extends Activity {
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 Log.d(TAG, "User declined to enable bluetooth");
             }
+        }
+        else if (requestCode == REQUEST_GRANT_SUPERUSER) {
+            Log.d(TAG, "su resultCode=" + resultCode);
+            Log.d(TAG, data.toString());
         }
     }
 }

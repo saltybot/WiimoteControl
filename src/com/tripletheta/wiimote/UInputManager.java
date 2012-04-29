@@ -22,11 +22,7 @@ public class UInputManager {
     public void zoomOut() {
         
     }
-    
-    public void click() {
-        
-    }
-    
+   
     public void clickHold() {
         
     }
@@ -43,4 +39,5 @@ public class UInputManager {
     public native void destroy();
     public native void movePointerAbsolute(int x, int y);
     public native void movePointerRelative(int x, int y);
+    public native void click();
 }

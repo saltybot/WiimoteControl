@@ -100,3 +100,14 @@ JNIEXPORT void JNICALL Java_com_tripletheta_wiimote_UInputManager_movePointerRel
   sendEvent(EV_SYN, SYN_REPORT, 0);
 }
 
+JNIEXPORT void JNICALL Java_com_tripletheta_wiimote_UInputManager_click(
+  JNIEnv* env, jobject obj)
+{
+  memset(&ev, 0, sizeof(ev));
+  sendEvent(EV_KEY, BTN_MOUSE, 1);
+  sendEvent(EV_SYN, SYN_REPORT, 0);
+  memset(&ev, 0, sizeof(ev));
+  sendEvent(EV_KEY, BTN_MOUSE, 0);
+  sendEvent(EV_SYN, SYN_REPORT, 0);
+}
+

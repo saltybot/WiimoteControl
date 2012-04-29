@@ -27,8 +27,10 @@ public class WiimoteControlActivity extends Activity implements OnClickListener 
     
     private UInputManager mUInputManager;
     
-    private EditText mXCoordText;
-    private EditText mYCoordText;
+    private EditText mXRelCoordText;
+    private EditText mYRelCoordText;
+    private EditText mXAbsCoordText;
+    private EditText mYAbsCoordText;
 	
     private final BroadcastReceiver mBluetoothBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -63,16 +65,28 @@ public class WiimoteControlActivity extends Activity implements OnClickListener 
         
         mUInputManager = new UInputManager();
 
-        mXCoordText = (EditText) findViewById(R.id.xCoordText);
-        mYCoordText = (EditText) findViewById(R.id.yCoordText);
+        mXRelCoordText = (EditText) findViewById(R.id.xRelCoordText);
+        mYRelCoordText = (EditText) findViewById(R.id.yRelCoordText);
+        mXAbsCoordText = (EditText) findViewById(R.id.xAbsCoordText);
+        mYAbsCoordText = (EditText) findViewById(R.id.yAbsCoordText);
         
-        Button sendEventButton = (Button) findViewById(R.id.sendEventButton);
-        sendEventButton.setOnClickListener(this);
+        Button sendRelEventButton = (Button) findViewById(R.id.sendRelEventButton);
+        sendRelEventButton.setOnClickListener(this);
+        Button sendAbsEventButton = (Button) findViewById(R.id.sendAbsEventButton);
+        sendAbsEventButton.setOnClickListener(this);
+        
+        findViewById(R.id.clickButton).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mUInputManager.click();
+            }
+        });
     }
     
     @Override
     public void onDestroy() {
         //unregisterReceiver(mBluetoothBroadcastReceiver);
+        mUInputManager.destroy();
         super.onDestroy();
     }
 
@@ -80,9 +94,16 @@ public class WiimoteControlActivity extends Activity implements OnClickListener 
     public void onClick(View v) {
         int x, y;
         try {
-            x = Integer.parseInt(mXCoordText.getText().toString());
-            y = Integer.parseInt(mYCoordText.getText().toString());
-            mUInputManager.movePointerRelative(x, y);
+            if (v.getId() == R.id.sendRelEventButton) {
+                x = Integer.parseInt(mXRelCoordText.getText().toString());
+                y = Integer.parseInt(mYRelCoordText.getText().toString());
+                mUInputManager.movePointerRelative(x, y);
+            }
+            else if (v.getId() == R.id.sendAbsEventButton) {
+                x = Integer.parseInt(mXAbsCoordText.getText().toString());
+                y = Integer.parseInt(mYAbsCoordText.getText().toString());
+                mUInputManager.movePointerAbsolute(x, y);
+            }
         }
         catch (NumberFormatException e) {
             e.printStackTrace();

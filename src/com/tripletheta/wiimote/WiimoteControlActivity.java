@@ -5,6 +5,8 @@ import java.io.IOException;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothServerSocket;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +28,8 @@ public class WiimoteControlActivity extends Activity implements OnClickListener 
     private static final String WIIMOTE_NINTENDO_WIIMOTE_PLUS = "Nintendo RVL-CNT-01-TR";
     
     private UInputManager mUInputManager;
+    private BluetoothAdapter mBluetoothAdapter;
+    private BluetoothServerSocket mBluetoothServerSocket;
     
     private EditText mXRelCoordText;
     private EditText mYRelCoordText;
@@ -61,7 +65,7 @@ public class WiimoteControlActivity extends Activity implements OnClickListener 
             e.printStackTrace();
         }
         
-        //initBluetooth();
+        initBluetooth();
         
         mUInputManager = new UInputManager();
 
@@ -85,7 +89,7 @@ public class WiimoteControlActivity extends Activity implements OnClickListener 
     
     @Override
     public void onDestroy() {
-        //unregisterReceiver(mBluetoothBroadcastReceiver);
+        unregisterReceiver(mBluetoothBroadcastReceiver);
         mUInputManager.destroy();
         super.onDestroy();
     }
@@ -122,18 +126,28 @@ public class WiimoteControlActivity extends Activity implements OnClickListener 
     }
     
     private void initBluetooth() {
+        //mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        //if (mBluetoothAdapter == null) {
+        //    Log.e(TAG, "NO BLUETOOTH ADAPTER FOUND. NOT GONNA HAPPEN.");
+        //}
+        
+
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter != null) {
+            Log.d(TAG, "NO BLUETOOTH ADAPTER FOUND. NOT GONNA HAPPEN");
+            finish();
+        }
+        
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         registerReceiver(mBluetoothBroadcastReceiver, filter);
-
-        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         
         // Prompt user to enable bluetooth, if not already enabled
-        if(!bluetoothAdapter.isEnabled()) {
+        if(!mBluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
         
-        if (!bluetoothAdapter.startDiscovery()) {
+        if (!mBluetoothAdapter.startDiscovery()) {
             Log.w(TAG, "Failed to start bluetooth discovery");
         }
     }

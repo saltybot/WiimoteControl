@@ -11,16 +11,24 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
 
-public class WiimoteControlActivity extends Activity {
+public class WiimoteControlActivity extends Activity implements OnClickListener {
 
     private static final int REQUEST_ENABLE_BT = 0x424C5545;
-    private static final int REQUEST_GRANT_SUPERUSER = 0x524F4F54;
 	
     private static final String TAG = "WiimoteControlActivity";
 
     private static final String WIIMOTE_NINTENDO_WIIMOTE = "Nintendo RVL-CNT-01";
     private static final String WIIMOTE_NINTENDO_WIIMOTE_PLUS = "Nintendo RVL-CNT-01-TR";
+    
+    private UInputManager mUInputManager;
+    
+    private EditText mXCoordText;
+    private EditText mYCoordText;
 	
     private final BroadcastReceiver mBluetoothBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -51,28 +59,36 @@ public class WiimoteControlActivity extends Activity {
             e.printStackTrace();
         }
         
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        registerReceiver(mBluetoothBroadcastReceiver, filter);
+        //initBluetooth();
+        
+        mUInputManager = new UInputManager();
 
-        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        mXCoordText = (EditText) findViewById(R.id.xCoordText);
+        mYCoordText = (EditText) findViewById(R.id.yCoordText);
         
-        // Prompt user to enable bluetooth, if not already enabled
-        if(!bluetoothAdapter.isEnabled()) {
-        	Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-        	startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-        }
-        
-        if (!bluetoothAdapter.startDiscovery()) {
-        	Log.w(TAG, "Failed to start bluetooth discovery");
-        }
+        Button sendEventButton = (Button) findViewById(R.id.sendEventButton);
+        sendEventButton.setOnClickListener(this);
     }
     
     @Override
     public void onDestroy() {
-        unregisterReceiver(mBluetoothBroadcastReceiver);
+        //unregisterReceiver(mBluetoothBroadcastReceiver);
         super.onDestroy();
     }
-    
+
+    @Override
+    public void onClick(View v) {
+        int x, y;
+        try {
+            x = Integer.parseInt(mXCoordText.getText().toString());
+            y = Integer.parseInt(mYCoordText.getText().toString());
+            mUInputManager.movePointerRelative(x, y);
+        }
+        catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_ENABLE_BT) {
@@ -82,9 +98,22 @@ public class WiimoteControlActivity extends Activity {
                 Log.d(TAG, "User declined to enable bluetooth");
             }
         }
-        else if (requestCode == REQUEST_GRANT_SUPERUSER) {
-            Log.d(TAG, "su resultCode=" + resultCode);
-            Log.d(TAG, data.toString());
+    }
+    
+    private void initBluetooth() {
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        registerReceiver(mBluetoothBroadcastReceiver, filter);
+
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        
+        // Prompt user to enable bluetooth, if not already enabled
+        if(!bluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
+        
+        if (!bluetoothAdapter.startDiscovery()) {
+            Log.w(TAG, "Failed to start bluetooth discovery");
         }
     }
 }

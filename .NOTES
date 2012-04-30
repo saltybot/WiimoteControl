@@ -1,0 +1,15 @@
+Need Wiimote service that listeners can subscribe to listen to wiimote events.
+Service can also recieve events like play a sound, or light up an LED on the Wiimote
+
+Events
+======
+Button
+Accelerometer
+Speaker
+IR Camera
+Accessory
+
+App should have at least:
+Wiimote Service
+UInput Service
+Activity that utilizes both Wiimote and UInput service to control mouse

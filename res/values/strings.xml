@@ -3,5 +3,7 @@
 
     <string name="hello">Hello World, WiimoteControlActivity!</string>
     <string name="app_name">WiimoteControl</string>
+    
+    <string name="bluetooth_adapter_not_found">DEVICE DOES NOT SUPPORT BLUETOOTH. NOT GONNA HAPPEN.</string>
 
 </resources>

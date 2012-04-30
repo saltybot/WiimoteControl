@@ -1,68 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
+    <TextView 
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Relative" />
-    <EditText
-        android:id="@+id/xRelCoordText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="X"
-        android:inputType="numberSigned">
-
-        <requestFocus />
-    </EditText>
-
-    <EditText
-        android:id="@+id/yRelCoordText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Y"
-        android:inputType="numberSigned"/>
-    <Button
-        android:id="@+id/sendRelEventButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Send Relative" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Absolute" />
-    
-    <EditText
-        android:id="@+id/xAbsCoordText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="X"
-        android:inputType="numberSigned" />
-
-    <EditText
-        android:id="@+id/yAbsCoordText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Y"
-        android:inputType="numberSigned"/>
-    
-    <Button
-        android:id="@+id/sendAbsEventButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Send Absoulte" />
-
-    <Button
-        android:id="@+id/clickButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Click" />
+        android:layout_height="match_parent"
+        android:text="@string/hello" />
 
 </LinearLayout>

@@ -4,9 +4,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView 
+    <TextView
+        android:id="@+id/textView1"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:text="@string/hello" />
+        android:layout_height="wrap_content"
+        android:text="List of connected Devices" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="List of paired devices" />
+
+    <Button
+        android:id="@+id/scanButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Scan" />
 
 </LinearLayout>

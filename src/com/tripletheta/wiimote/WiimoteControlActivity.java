@@ -13,6 +13,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.Toast;
 
 public class WiimoteControlActivity extends Activity {
@@ -35,8 +38,12 @@ public class WiimoteControlActivity extends Activity {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 if (WIIMOTE_NINTENDO_WIIMOTE.equals(device.getName())) {
                     Log.d(TAG, "Found Nintendo WiiMote at " + device.getAddress());
-                } else if (WIIMOTE_NINTENDO_WIIMOTE_PLUS.equals(device.getName())) {
+                }
+                else if (WIIMOTE_NINTENDO_WIIMOTE_PLUS.equals(device.getName())) {
                     Log.d(TAG, "Found Nintendo Wiimote Plus at " + device.getAddress());
+                }
+                else {
+                	Log.d(TAG, "Discovered bluetooth device: " + device.getName());
                 }
             }
         }
@@ -49,6 +56,15 @@ public class WiimoteControlActivity extends Activity {
         setContentView(R.layout.main);
 
         initBluetooth();
+        
+        Button scanButton = (Button) findViewById(R.id.scanButton);
+        scanButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				mBluetoothAdapter.startDiscovery();
+			}
+		});
+        
+        
     }
     
     @Override
@@ -82,10 +98,6 @@ public class WiimoteControlActivity extends Activity {
         if(!mBluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-        }
-        
-        if (!mBluetoothAdapter.startDiscovery()) {
-            Log.w(TAG, "Failed to start bluetooth discovery");
         }
     }
 }
